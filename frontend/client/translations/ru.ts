@@ -288,7 +288,7 @@ export const ru = {
     unknown: "Неизвестно",
     active: "Активен",
     inactive: "Неактивен",
-    off: "Выключен",
+    off: "Выключено",
   },
 
   // Buttons

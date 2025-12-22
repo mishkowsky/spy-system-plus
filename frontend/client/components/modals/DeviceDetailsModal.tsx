@@ -363,16 +363,7 @@ export default function DeviceDetailsModal({
                         : t("table.unknown")}
                     </Badge>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm font-medium">
-                      {t("table.createDate")}:
-                    </span>
-                    <span className="text-sm">
-                      {displayDevice.lastActiveTime
-                        ? formatDateTime(displayDevice.lastActiveTime)
-                        : t("table.unknown")}
-                    </span>
-                  </div>
+
                   {/*<div className="flex justify-between items-center">*/}
                   {/*  <span className="text-sm font-medium">Created:</span>*/}
                   {/*  <span className="text-sm">*/}
