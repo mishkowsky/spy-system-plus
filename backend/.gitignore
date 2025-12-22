@@ -1,0 +1,8 @@
+target/
+*.log
+*.class
+build
+.idea
+.gradle
+uploads
+postgres_data

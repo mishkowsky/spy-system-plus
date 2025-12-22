@@ -1,0 +1,38 @@
+#version: "3.8"
+#
+#services:
+#  app:
+#    build:
+#      context: .
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/spy-system
+#      - SPRING_DATASOURCE_USERNAME=postgres
+#      - SPRING_DATASOURCE_PASSWORD=postgres
+#      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+#      - SPRING_JPA_SHOW_SQL=true
+#    depends_on:
+#      - db
+#    networks:
+#      - spy-system-network
+#
+#  db:
+#    image: postgres:14
+#    ports:
+#      - "5433:5432"
+#    environment:
+#      - POSTGRES_DB=spy-system
+#      - POSTGRES_USER=postgres
+#      - POSTGRES_PASSWORD=postgres
+#    volumes:
+#      - ${PATH_TO_DB_DATA}:/var/lib/postgresql/data
+#    networks:
+#      - spy-system-network
+#
+#networks:
+#  spy-system-network:
+#    driver: bridge
+#
+#volumes:
+#  postgres-data:
