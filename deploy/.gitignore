@@ -1,0 +1,5 @@
+**/sbin/**
+*.jar
+backend
+nginx
+frontend_nginx
