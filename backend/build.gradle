@@ -32,6 +32,7 @@ dependencies {
     implementation 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'io.micrometer:micrometer-registry-prometheus'
+    testImplementation 'com.h2database:h2'
 }
 
 test {

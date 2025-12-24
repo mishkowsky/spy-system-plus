@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -34,12 +35,121 @@ public class TestDataLoader {
     private final PunishmentTaskRepository punishmentTaskRepository;
     private final DeviceChangeTaskRepository deviceChangeTaskRepository;
     private final MetricRepository metricRepository;
+    private final MonitoringTimeIntervalRepository monitoringTimeIntervalRepository;
+    private final ResetTokenRepository resetTokenRepository;
+    private final FileRepository fileRepository;
+
     @Value("${environment}")
     private String environment;
 
     @PostConstruct
     public void loadTestData() {
         log.info("CREATING TEST DATA");
+        if (Objects.equals(environment, "test")) {
+
+            return;
+        } else
+        if (Objects.equals(environment, "hand_test")) {
+
+            contractRepository.deleteAll();
+            metricRepository.deleteAll();
+            punishmentTaskRepository.deleteAll();
+            deviceChangeTaskRepository.deleteAll();
+            timeIntervalRepository.deleteAll();
+            monitoringTimeIntervalRepository.deleteAll();
+            resetTokenRepository.deleteAll();
+            fileRepository.deleteAll();
+
+            clientRepository.deleteAll();
+            workerRepository.deleteAll();
+            managerRepository.deleteAll();
+
+            Manager manager = new Manager();
+            manager.setEmail("manager@example.com");
+            manager.setPassword(passwordEncoder.encode("managerpass"));
+            manager.setName("Менеджер");
+            manager.setSurname("Менеджеров");
+            manager.setLastname("Егорович");
+            manager.setIsSenior(true);
+            managerRepository.save(manager);
+
+            Client client = new Client();
+            client.setEmail("client@example.com");
+            client.setPassword(passwordEncoder.encode("clientpass"));
+            client.setName("Клиент");
+            client.setSurname("Клиентов");
+            client.setLastname("Семенович");
+            client.setMetricThreshold(70);
+            client.setViolationsCount(0);
+            client.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
+            client.setUpdatedAt(Timestamp.valueOf(LocalDateTime.now()));
+            clientRepository.save(client);
+
+            Device assignedDevice = new Device();
+            assignedDevice.setDeviceId(1L);
+            assignedDevice.setStatus(DeviceStatus.ACTIVE);
+            assignedDevice.setAssignedClientId(client.getId());
+            assignedDevice.setBatteryLevel(100);
+            assignedDevice.setAssignmentStatus(DeviceAssignmentStatus.ASSIGNED);
+            deviceRepository.save(assignedDevice);
+
+            Device freeDevice = new Device();
+            freeDevice.setDeviceId(2L);
+            freeDevice.setStatus(DeviceStatus.ACTIVE);
+            freeDevice.setBatteryLevel(100);
+            freeDevice.setAssignmentStatus(DeviceAssignmentStatus.UNASSIGNED);
+            deviceRepository.save(freeDevice);
+
+            Metric metric = new Metric();
+            metric.setClientId(client.getId());
+            metric.setValue(10);
+            metric.setLatitude(60.0);
+            metric.setLongitude(30.25);
+            metric.setTimestamp(new Timestamp(System.currentTimeMillis()));
+            metric.setDeviceId(assignedDevice.getDeviceId());
+            metricRepository.save(metric);
+
+            Metric metric2 = new Metric();
+            metric2.setClientId(client.getId());
+            metric2.setValue(15);
+            metric2.setLatitude(60.0);
+            metric2.setLongitude(30.2);
+            metric2.setTimestamp(new Timestamp(System.currentTimeMillis()));
+            metric2.setDeviceId(freeDevice.getDeviceId());
+            metricRepository.save(metric2);
+
+            Contract contract = new Contract();
+            contract.setClient(client);
+            contract.setSigner(manager);
+            contract.setStatus(ContractStatus.CREATED);
+            contract.setFilepath("test.txt");
+            contract.setFilename("test.txt");
+            contract.setStartDate(new Date(System.currentTimeMillis()));
+            contract.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
+            contractRepository.save(contract);
+
+            Worker worker = new Worker();
+            worker.setEmail("worker@example.com");
+            worker.setPassword(passwordEncoder.encode("workerpass"));
+            worker.setName("Сотрудник");
+            worker.setSurname("Наказаний");
+            worker.setLastname("Иванович");
+            worker.setRole(WorkerRole.CORRECTIONS_OFFICER);
+            worker.setManager(manager);
+            workerRepository.save(worker);
+
+            Worker worker2 = new Worker();
+            worker2.setEmail("worker2@example.com");
+            worker2.setPassword(passwordEncoder.encode("workerpass"));
+            worker2.setName("Сотрудник");
+            worker2.setSurname("Слежки");
+            worker2.setLastname("Петрович");
+            worker2.setRole(WorkerRole.SURVEILLANCE_OFFICER);
+            worker2.setManager(manager);
+            workerRepository.save(worker2);
+
+            return;
+        } else
         if (Objects.equals(environment, "prod")) {
             if (managerRepository.findByEmail("").isPresent()) {
                 log.info(" DATA ALREADY CREATED");
@@ -213,7 +323,5 @@ public class TestDataLoader {
             dct.setStatus(TaskStatus.NEW);
             deviceChangeTaskRepository.save(dct);
         }
-
-
     }
 }

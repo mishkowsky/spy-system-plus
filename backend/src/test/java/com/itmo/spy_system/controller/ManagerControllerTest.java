@@ -15,32 +15,39 @@ import java.util.Collections;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(ManagerController.class)
-public class ManagerControllerTest {
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @MockBean
-    private ManagerService service;
-
+public class ManagerControllerTest extends BaseApiTest {
     @Test
-    public void testGetAllManagers() throws Exception {
-        Mockito.when(service.findAll()).thenReturn(Collections.emptyList());
-        mockMvc.perform(get("/managers"))
-               .andExpect(status().isOk())
-               .andExpect(content().json("[]"));
-    }
+    void createManagers() throws Exception {
+        mockMvc.perform(post("/api/managers")
+                        .with(seniorManagerAuth())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(String.format("""
+                    {
+                        "email": "test@test.test",
+                        "name": "test",
+                        "surname": "test",
+                        "lastname": "test",
+                        "isSenior": "false"
+                    }
+                """, clientUsername, clientPassword)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.email").value("test@test.test"))
+                .andExpect(jsonPath("$.isSenior").value("false"));
 
-    @Test
-    public void testCreateManager() throws Exception {
-        Manager entity = new Manager();
-        entity.setId(1L);
-        Mockito.when(service.save(Mockito.any())).thenReturn(entity);
-        mockMvc.perform(post("/managers")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{{}}"))
-               .andExpect(status().isOk())
-               .andExpect(jsonPath("$.id").value(1));
+        mockMvc.perform(post("/api/managers")
+                        .with(seniorManagerAuth())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                    {
+                        "email": "test2@test.test",
+                        "name": "test",
+                        "surname": "test",
+                        "lastname": "test",
+                        "isSenior": "true"
+                    }
+                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.email").value("test2@test.test"))
+                .andExpect(jsonPath("$.isSenior").value("true"));;
     }
 }

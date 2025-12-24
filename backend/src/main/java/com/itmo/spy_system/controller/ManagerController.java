@@ -28,7 +28,7 @@ import java.util.Optional;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/managers")
-public class ManagerController {
+public class ManagerController extends BaseExceptionHandler {
 
     @Autowired
     ObjectMapper objectMapper;

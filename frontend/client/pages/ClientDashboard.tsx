@@ -631,10 +631,10 @@ export default function ClientDashboard() {
                     {t("form.newFileSelected", { name: editFile.name })}
                   </p>
                 )}
-                {!editFile && selectedContractForEdit?.filepath && (
+                {!editFile && selectedContractForEdit?.filename && (
                   <p className="text-sm text-muted-foreground">
                     {t("form.currentFile", {
-                      filepath: selectedContractForEdit.filepath,
+                      filepath: selectedContractForEdit.filename,
                     })}
                   </p>
                 )}

@@ -32,10 +32,10 @@ public interface MetricRepository extends JpaRepository<Metric, Long> {
 
     @Query(value = """
         SELECT m.id, m.device_id AS deviceId, m.timestamp
-        FROM metric m
+        FROM device_metric m
         JOIN (
             SELECT device_id, MAX(timestamp) AS max_timestamp
-            FROM metric
+            FROM device_metric
             GROUP BY device_id
         ) t
           ON m.device_id = t.device_id

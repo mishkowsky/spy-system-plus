@@ -45,6 +45,8 @@ services:
       context: ./backend
     ports:
       - "8080:8080"
+    volumes:
+      - './uploads:/app/uploads'
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/spy-system
       - SPRING_DATASOURCE_USERNAME=postgres
@@ -57,6 +59,8 @@ services:
       - spy-system-network
 
   frontend:
+    ports:
+      - "3000:3000"
     build:
       context: ./frontend
     networks:

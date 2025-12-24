@@ -6,7 +6,7 @@ import lombok.*;
 import java.sql.*;
 
 @Entity
-@Table(name = "metric")
+@Table(name = "device_metric")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,6 +20,7 @@ public class Metric {
     )
     private Long id;
     private Long deviceId;
+    @Column(name="metric_value")
     private Integer value;
     private Timestamp timestamp;
     private Long clientId;

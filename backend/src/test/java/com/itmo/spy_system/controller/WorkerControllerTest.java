@@ -1,46 +1,40 @@
 package com.itmo.spy_system.controller;
 
-import com.itmo.spy_system.entity.Worker;
-import com.itmo.spy_system.service.WorkerService;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.Collections;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(WorkerController.class)
-public class WorkerControllerTest {
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @MockBean
-    private WorkerService service;
-
+public class WorkerControllerTest extends BaseApiTest {
     @Test
-    public void testGetAllWorkers() throws Exception {
-        Mockito.when(service.findAll()).thenReturn(Collections.emptyList());
-        mockMvc.perform(get("/workers"))
-               .andExpect(status().isOk())
-               .andExpect(content().json("[]"));
-    }
+    void createWorkers() throws Exception {
+        mockMvc.perform(post("/api/workers")
+                        .with(managerAuth())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(String.format("""
+                    {
+                        "email": "test@test.test",
+                        "name":"test",
+                        "surname":"test",
+                        "lastname":"test",
+                        "role":"CORRECTIONS_OFFICER"
+                    }
+                """, clientUsername, clientPassword)))
+                .andExpect(status().isOk());
 
-    @Test
-    public void testCreateWorker() throws Exception {
-        Worker entity = new Worker();
-        entity.setId(1L);
-        Mockito.when(service.save(Mockito.any())).thenReturn(entity);
-        mockMvc.perform(post("/workers")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{{}}"))
-               .andExpect(status().isOk())
-               .andExpect(jsonPath("$.id").value(1));
+        mockMvc.perform(post("/api/workers")
+                        .with(managerAuth())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(String.format("""
+                    {
+                        "email": "test@test.test",
+                        "name":"test",
+                        "surname":"test",
+                        "lastname":"test",
+                        "role":"SURVEILLANCE_OFFICER"
+                    }
+                """, clientUsername, clientPassword)))
+                .andExpect(status().isOk());
     }
 }

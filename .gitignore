@@ -1,4 +1,6 @@
 postgres_data
 prometheus
 grafana
+!config/grafana
 .idea
+uploads

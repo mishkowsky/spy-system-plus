@@ -1,5 +1,6 @@
 package com.itmo.spy_system.controller;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
 import com.itmo.spy_system.entity.Notification;
 import com.itmo.spy_system.service.NotificationService;
 import org.junit.jupiter.api.Test;
@@ -15,11 +16,7 @@ import java.util.Collections;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(NotificationController.class)
-public class NotificationControllerTest {
-
-    @Autowired
-    private MockMvc mockMvc;
+public class NotificationControllerTest extends BaseApiTest {
 
     @MockBean
     private NotificationService service;
@@ -27,7 +24,7 @@ public class NotificationControllerTest {
     @Test
     public void testGetAllNotifications() throws Exception {
         Mockito.when(service.findAll()).thenReturn(Collections.emptyList());
-        mockMvc.perform(get("/notifications"))
+        mockMvc.perform(get("/api/notifications").with(managerAuth()))
                .andExpect(status().isOk())
                .andExpect(content().json("[]"));
     }
