@@ -9,6 +9,8 @@ import com.itmo.spy_system.utils.EmailAlreadyExistsException;
 import com.itmo.spy_system.utils.EmailChecker;
 import com.itmo.spy_system.utils.WrongOldPasswordException;
 import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -104,10 +106,12 @@ public class ManagerController extends BaseExceptionHandler {
         service.deleteById(id);
     }
 
+    @Data
+    @NoArgsConstructor
     @AllArgsConstructor
     public static class PasswordChange {
-        private final String currentPassword;
-        private final String newPassword;
+        private String currentPassword;
+        private String newPassword;
     }
 
     @Secured({"manager"})

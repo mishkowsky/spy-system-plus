@@ -180,6 +180,7 @@ export default function Profile() {
       // Update auth context
       await updateUser(userWithPreservedRole);
       setProfileSuccess(true);
+      apiClient.updateEmail(values.email);
 
       // Hide success message after 3 seconds
       setTimeout(() => setProfileSuccess(false), 3000);
@@ -235,7 +236,9 @@ export default function Profile() {
         currentPassword: values.currentPassword,
         newPassword: values.newPassword,
       });
-
+      const credentials_s = `${user.email}:${values.newPassword}`;
+      const encodedCredentials = btoa(credentials_s); // base64 encode
+      apiClient.setAuthToken(encodedCredentials);
       setPasswordSuccess(true);
       passwordForm.reset();
 

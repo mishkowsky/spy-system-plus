@@ -26,18 +26,20 @@ import java.util.Objects;
 public class TestDataLoader {
 
     private final ClientRepository clientRepository;
-    private final ManagerRepository managerRepository;
-    private final WorkerRepository workerRepository;
-    private final DeviceRepository deviceRepository;
-    private final TimeIntervalRepository timeIntervalRepository;
     private final ContractRepository contractRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final PunishmentTaskRepository punishmentTaskRepository;
+    private final DeviceRepository deviceRepository;
     private final DeviceChangeTaskRepository deviceChangeTaskRepository;
     private final MetricRepository metricRepository;
-    private final MonitoringTimeIntervalRepository monitoringTimeIntervalRepository;
-    private final ResetTokenRepository resetTokenRepository;
     private final FileRepository fileRepository;
+    private final ManagerRepository managerRepository;
+    private final MonitoringTimeIntervalRepository monitoringTimeIntervalRepository;
+    private final NotificationRepository notificationRepository;
+    private final PunishmentTaskRepository punishmentTaskRepository;
+    private final ResetTokenRepository resetTokenRepository;
+    private final TimeIntervalRepository timeIntervalRepository;
+    private final WorkerRepository workerRepository;
+
+    private final PasswordEncoder passwordEncoder;
 
     @Value("${environment}")
     private String environment;
@@ -50,19 +52,24 @@ public class TestDataLoader {
             return;
         } else
         if (Objects.equals(environment, "hand_test")) {
+            log.info("HAND TEST CASE");
+            log.info("REMOVING OLD DATA");
 
             contractRepository.deleteAll();
-            metricRepository.deleteAll();
-            punishmentTaskRepository.deleteAll();
             deviceChangeTaskRepository.deleteAll();
-            timeIntervalRepository.deleteAll();
-            monitoringTimeIntervalRepository.deleteAll();
-            resetTokenRepository.deleteAll();
+            metricRepository.deleteAll();
+            deviceRepository.deleteAll();
             fileRepository.deleteAll();
+            monitoringTimeIntervalRepository.deleteAll();
+            notificationRepository.deleteAll();
+            punishmentTaskRepository.deleteAll();
+            resetTokenRepository.deleteAll();
+            timeIntervalRepository.deleteAll();
 
             clientRepository.deleteAll();
             workerRepository.deleteAll();
             managerRepository.deleteAll();
+            log.info("CREATING TEST DATA");
 
             Manager manager = new Manager();
             manager.setEmail("manager@example.com");

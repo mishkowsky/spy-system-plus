@@ -1,6 +1,7 @@
 package com.itmo.spy_system.controller;
 
 import com.itmo.spy_system.entity.PunishmentTask;
+import com.itmo.spy_system.entity.TaskStatus;
 import com.itmo.spy_system.service.PunishmentTaskService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -15,32 +16,16 @@ import java.util.Collections;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(PunishmentTaskController.class)
-public class PunishmentTaskControllerTest {
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @MockBean
-    private PunishmentTaskService service;
+public class PunishmentTaskControllerTest extends BaseApiTest {
 
     @Test
-    public void testGetAllPunishmentTasks() throws Exception {
-        Mockito.when(service.findAll()).thenReturn(Collections.emptyList());
-        mockMvc.perform(get("/punishmentTasks"))
-               .andExpect(status().isOk())
-               .andExpect(content().json("[]"));
-    }
-
-    @Test
-    public void testCreatePunishmentTask() throws Exception {
-        PunishmentTask entity = new PunishmentTask();
-        entity.setId(1L);
-        Mockito.when(service.save(Mockito.any())).thenReturn(entity);
-        mockMvc.perform(post("/punishmentTasks")
+    public void patchPunishmentTask() throws Exception {
+        mockMvc.perform(patch("/api/punishment_tasks/{1}", punishmentTask.getId()).with(workerAuth())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{{}}"))
+                .content(String.format("""
+                        {"status":"%s"}
+                        """, TaskStatus.DONE)))
                .andExpect(status().isOk())
-               .andExpect(jsonPath("$.id").value(1));
+               .andExpect(jsonPath("$.status").value(TaskStatus.DONE.toString()));
     }
 }

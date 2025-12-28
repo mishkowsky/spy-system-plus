@@ -45,9 +45,9 @@ public class DeviceHealthCheck {
                     n.setCreatedAt(new Timestamp(System.currentTimeMillis()));
                     n.setStatus(NotificationStatus.UNREAD);
                     notificationService.save(n);
-                    d.setStatus(DeviceStatus.INACTIVE);
-                    deviceRepository.save(d);
                 }
+                d.setStatus(DeviceStatus.INACTIVE);
+                deviceRepository.save(d);
             }
         }
     }

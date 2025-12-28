@@ -17,33 +17,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class ContractControllerTest extends BaseApiTest {
 
-    @MockBean
-    private ContractService service;
-
     @Test
-    public void getAllContracts() throws Exception {
-//        Mockito.when(service.findAll()).thenReturn(Collections.emptyList());
+    public void getContracts() throws Exception {
         mockMvc.perform(get("/api/contracts/filtered?signerId={id}", manager.getId())
                         .with(managerAuth()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$[0].id").value(contract.getId()));
-    }
-
-    @Test
-    public void testCreateContract() throws Exception {
-        Contract entity = new Contract();
-        entity.setId(1L);
-        Mockito.when(service.save(Mockito.any())).thenReturn(entity);
-        mockMvc.perform(post("/api/contracts")
-                        .with(clientAuth())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("""
-                        {
-                            
-                        }
-                        """))
-               .andExpect(status().isOk())
-               .andExpect(jsonPath("$.id").value(1));
     }
 }

@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @SpringBootTest(
         properties = {
@@ -70,6 +71,30 @@ public abstract class BaseApiTest {
     @Autowired
     protected MetricRepository metricRepository;
 
+    @Autowired
+    protected PunishmentTaskRepository punishmentTaskRepository;
+
+    @Autowired
+    protected DeviceChangeTaskRepository deviceChangeTaskRepository;
+
+    @Autowired
+    protected WorkerRepository workerRepository;
+
+    @Autowired
+    protected NotificationRepository notificationRepository;
+
+    @Autowired
+    protected TimeIntervalRepository timeIntervalRepository;
+
+    @Autowired
+    protected MonitoringTimeIntervalRepository monitoringTimeIntervalRepository;
+
+    @Autowired
+    protected ResetTokenRepository resetTokenRepository;
+
+    @Autowired
+    protected FileRepository fileRepository;
+
     protected Manager seniorManager;
     protected String seniorManagerUsername;
     protected String seniorManagerPassword;
@@ -77,6 +102,10 @@ public abstract class BaseApiTest {
     protected Manager manager;
     protected String managerUsername;
     protected String managerPassword;
+
+    protected Worker worker;
+    protected String workerUsername;
+    protected String workerPassword;
 
     protected Client client;
     protected String clientUsername;
@@ -89,12 +118,23 @@ public abstract class BaseApiTest {
     protected Device freeDevice;
 
     protected Contract contract;
+    protected PunishmentTask punishmentTask;
+    protected DeviceChangeTask deviceChangeTask;
 
     @BeforeEach
     void setUpData() {
-
+        notificationRepository.deleteAll();
         contractRepository.deleteAll();
+        metricRepository.deleteAll();
+        punishmentTaskRepository.deleteAll();
+        deviceChangeTaskRepository.deleteAll();
+        timeIntervalRepository.deleteAll();
+        monitoringTimeIntervalRepository.deleteAll();
+        resetTokenRepository.deleteAll();
+        fileRepository.deleteAll();
+
         clientRepository.deleteAll();
+        workerRepository.deleteAll();
         managerRepository.deleteAll();
 
         seniorManager = new Manager();
@@ -117,7 +157,9 @@ public abstract class BaseApiTest {
         clientUsername = "client@mail.com";
         clientPassword = "client";
         client.setEmail(clientUsername);
+        client.setViolationsCount(0);
         client.setPassword(passwordEncoder.encode(clientPassword));
+        client.setMetricThreshold(50);
         clientRepository.save(client);
 
         clientA = new Client();
@@ -175,6 +217,36 @@ public abstract class BaseApiTest {
         freeDevice.setBatteryLevel(100);
         freeDevice.setAssignmentStatus(DeviceAssignmentStatus.UNASSIGNED);
         deviceRepository.save(freeDevice);
+
+        worker = new Worker();
+        workerUsername = "worker@example.com";
+        workerPassword = "workerpass";
+        worker.setEmail(workerUsername);
+        worker.setPassword(passwordEncoder.encode(workerPassword));
+        worker.setName("Сотрудник");
+        worker.setSurname("Наказаний");
+        worker.setLastname("Иванович");
+        worker.setRole(WorkerRole.CORRECTIONS_OFFICER);
+        worker.setManager(manager);
+        workerRepository.save(worker);
+
+        punishmentTask = new PunishmentTask();
+        punishmentTask.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
+        punishmentTask.setCause("Кто-то что-то сделал");
+        punishmentTask.setType(PunishmentType.PHYSICAL);
+        punishmentTask.setDoneAt(null);
+        punishmentTask.setStatus(TaskStatus.NEW);
+        punishmentTask.setClient(client);
+        punishmentTask.setExecutionerId(worker.getId());
+        punishmentTaskRepository.save(punishmentTask);
+
+        deviceChangeTask = new DeviceChangeTask();
+        deviceChangeTask.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
+        deviceChangeTask.setStatus(TaskStatus.NEW);
+        deviceChangeTask.setNewDeviceId(freeDevice.getDeviceId());
+        deviceChangeTask.setOldDeviceId(assignedDevice.getDeviceId());
+        deviceChangeTask.setExecutionerId(worker.getId());
+        deviceChangeTaskRepository.save(deviceChangeTask);
     }
 
     protected RequestPostProcessor seniorManagerAuth() {
@@ -187,6 +259,10 @@ public abstract class BaseApiTest {
 
     protected RequestPostProcessor clientAuth() {
         return basicAuth(clientUsername, clientPassword);
+    }
+
+    protected RequestPostProcessor workerAuth() {
+        return basicAuth(workerUsername, workerPassword);
     }
 
     protected RequestPostProcessor basicAuth(String user, String pass) {

@@ -892,20 +892,14 @@ function TaskTable({
                     <Badge variant={getStatusBadgeVariant(task.status)}>
                       {taskStatusToRu(task.status)}
                     </Badge>
+                    {task.status === "DONE" && task.doneAt && (
+                      <div className="text-xs text-green-600">
+                        Дата: {formatDate(task.doneAt)}
+                      </div>
+                    )}
                   </TableCell>
                   <TableCell>
                     {formatDate(task.createdAt)}
-                    {task.taskType === "device-change" && task.doneAt && (
-                      <div className="text-xs text-green-600">
-                        {t("taskManagement.done")}: {formatDate(task.doneAt)}
-                      </div>
-                    )}
-                    {task.taskType === "punishment" && task.completedAt && (
-                      <div className="text-xs text-green-600">
-                        {t("taskManagement.completed")}:{" "}
-                        {formatDate(task.completedAt)}
-                      </div>
-                    )}
                   </TableCell>
                   <TableCell>
                     <div className="flex gap-2">

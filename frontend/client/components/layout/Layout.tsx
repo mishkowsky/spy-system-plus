@@ -147,7 +147,8 @@ export function Layout({ children }: LayoutProps) {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
-                    variant="ghost"
+                      id={"profile-settings-popup"}
+                      variant="ghost"
                     className="relative h-8 w-8 rounded-full"
                   >
                     <Avatar className="h-8 w-8">

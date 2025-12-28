@@ -18,6 +18,13 @@ class ApiClient {
     localStorage.setItem("auth_token", token);
   }
 
+  updateEmail(email: string) {
+    const oldToken = atob(this.authToken);
+    const oldPassword = oldToken.substring(oldToken.indexOf(":") + 1)
+    const newAuthString = `${email}:${oldPassword}`;
+    this.setAuthToken(btoa(newAuthString));
+  }
+
   clearAuthToken() {
     this.authToken = null;
     localStorage.removeItem("auth_token");

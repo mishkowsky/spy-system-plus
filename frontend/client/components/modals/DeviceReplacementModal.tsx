@@ -261,7 +261,7 @@ export default function DeviceReplacementModal({
                           key={worker.id}
                           value={worker.id.toString()}
                         >
-                          {worker.name} {worker.surname} {worker.lastname}
+                          {worker.surname} {worker.name} {worker.lastname}
                         </SelectItem>
                       ))
                     )}

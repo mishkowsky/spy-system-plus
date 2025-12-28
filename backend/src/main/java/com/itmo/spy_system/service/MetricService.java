@@ -41,7 +41,7 @@ public class MetricService {
             client = clientRepository.findById(metric.getClientId()).orElse(null);
 
         if (client != null && (device.getAssignmentStatus() == DeviceAssignmentStatus.ASSIGNED || device.getAssignmentStatus() == DeviceAssignmentStatus.UNASSIGNMENT_PENDING) &&
-                saved.getValue() > client.getMetricThreshold() &&
+                client.getMetricThreshold() != null && saved.getValue() > client.getMetricThreshold() &&
                 (previousMetricForClient == null || previousMetricForClient.getValue() < client.getMetricThreshold())) {
 //            log.info("Metric fired");
             PunishmentTask task = new PunishmentTask();

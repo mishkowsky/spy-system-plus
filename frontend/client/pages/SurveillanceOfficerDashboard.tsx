@@ -541,7 +541,7 @@ export default function SurveillanceOfficerDashboard() {
         <Dialog open={isConfirmModalOpen} onOpenChange={setIsConfirmModalOpen}>
           <DialogContent className="sm:max-w-md">
             <DialogHeader>
-              <DialogTitle>Зарегестрировать нарушение</DialogTitle>
+              <DialogTitle>Зарегистрировать нарушение</DialogTitle>
               <DialogDescription>
                 {selectedClient &&
                   `Вы уверены, что хотите зарегистрировать нарушение для ${selectedClient.surname} ${selectedClient.name} ${selectedClient.lastname}?`}
@@ -583,7 +583,7 @@ export default function SurveillanceOfficerDashboard() {
                 onClick={handleRegisterPunishmentTask}
                 disabled={isSubmitting}
               >
-                {isSubmitting ? "Регистрируется..." : "Зарегестрировать"}
+                {isSubmitting ? "Регистрируется..." : "Зарегистрировать"}
               </Button>
             </DialogFooter>
           </DialogContent>

@@ -491,6 +491,7 @@ export function ClientThresholdModal({
                               <div className="space-y-2">
                                 <FormControl>
                                   <Slider
+                                    id="metricThreshold"
                                     value={[field.value || 0]}
                                     onValueChange={(value) =>
                                       field.onChange(value[0])

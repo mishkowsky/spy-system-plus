@@ -28,7 +28,7 @@ public class WorkerControllerTest extends BaseApiTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(String.format("""
                     {
-                        "email": "test@test.test",
+                        "email": "test1@test.test",
                         "name":"test",
                         "surname":"test",
                         "lastname":"test",

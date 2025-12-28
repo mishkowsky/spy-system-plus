@@ -119,7 +119,6 @@ public class DeviceController {
 
     @PostMapping("/{id}/off")
     public ResponseEntity<?> off(@PathVariable Long id) {
-        log.info("H$ELLELROGR");
         Optional<Device> optDevice = service.findById(id);
         if (optDevice.isEmpty()) {
             return ResponseEntity.unprocessableEntity().body("DeviceId not found in Device table");
