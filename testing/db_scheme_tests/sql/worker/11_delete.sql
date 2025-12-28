@@ -1,0 +1,3 @@
+-- TEST_NAME: delete
+-- EXPECTED: SUCCESS
+DELETE FROM worker WHERE id = 1;

@@ -4,7 +4,7 @@ BASE_API_URL = 'http://localhost'
 TIMEOUT = 10
 
 
-def post_metric(device_id):
+def post_metric(device_id: int, value: int, timestamp: str):
     url = f"{BASE_API_URL}/api/metrics"
 
     params = {
@@ -13,10 +13,10 @@ def post_metric(device_id):
 
     payload = {
         "deviceId": device_id,
-        "value": 50,
-        "timestamp": "2010-10-10T00:00:00",
-        "latitude": 60.25,
-        "longitude": 30,
+        "value": value,
+        "timestamp": timestamp,
+        "latitude": 59.976666,
+        "longitude": 30.286851,
     }
 
     response = requests.post(

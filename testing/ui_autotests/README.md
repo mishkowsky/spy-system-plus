@@ -1,5 +1,8 @@
 ## запуск
-requiers installed `python`
+requiers: 
+- installed `python`
+- running app (frontend + backend + database)
+
 ```commandline
 python3 -m venv .venv
 

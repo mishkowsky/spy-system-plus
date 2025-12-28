@@ -618,7 +618,8 @@ class TestCompleteSystemWorkflow:
         link_button = device_row.find_element(By.XPATH, "//button[contains(., 'Назначить')]")
         link_button.click()
         time.sleep(self.GLOBAL_DELAY)
-        post_metric(int(device_id))
+        post_metric(int(device_id), 50, "2010-10-10T00:00:00")
+        post_metric(int(device_id), 53, "2010-10-10T00:05:00")
 
     def close_modal_window(self, browser):
         time.sleep(self.GLOBAL_DELAY)
@@ -1196,7 +1197,6 @@ class TestCompleteSystemWorkflow:
             assert not notification_found, f"Unexpected notification '{notification_type}' found"
 
         return result
-
 
     def test_complete_system_workflow(self, browser):
         """Test the complete system workflow"""
