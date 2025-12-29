@@ -70,6 +70,12 @@ export function NotificationCenter() {
     }
   }, [user]);
 
+  useEffect(() => {
+    if (isOpen && user) {
+      fetchNotifications();
+    }
+  }, [isOpen, user]);
+
   const fetchNotifications = async () => {
     if (!user) return;
 

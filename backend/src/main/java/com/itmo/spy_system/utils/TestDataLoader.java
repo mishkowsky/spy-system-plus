@@ -158,7 +158,7 @@ public class TestDataLoader {
             return;
         } else
         if (Objects.equals(environment, "prod")) {
-            if (managerRepository.findByEmail("").isPresent()) {
+            if (managerRepository.findByEmail("admin@system.com").isPresent()) {
                 log.info(" DATA ALREADY CREATED");
                 return;
             }

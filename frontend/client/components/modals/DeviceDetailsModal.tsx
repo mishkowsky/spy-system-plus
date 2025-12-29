@@ -54,7 +54,7 @@ export default function DeviceDetailsModal({
   refreshTrigger = 0,
 }: DeviceDetailsModalProps) {
   const { t } = useTranslation();
-  const [displayDevice, setDisplayDevice] = useState<Device | null>(device);
+  const [displayDevice, setDisplayDevice] = useState<Device | null>(null);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [metrics, setMetrics] = useState<Metric[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -87,37 +87,37 @@ export default function DeviceDetailsModal({
   }, [allMetrics]);
 
   const refreshDeviceProperties = useCallback(async () => {
-    if (!displayDevice) return;
+    if (!device) return;
 
     try {
       // Fetch only updated device properties (no metrics/geolocation)
       const updatedDevice = await apiClient.get<Device>(
-        `/devices/${displayDevice.deviceId}`,
+        `/devices/${device.deviceId}`,
       );
       setDisplayDevice(updatedDevice);
     } catch (error) {
       console.error("Failed to refresh device properties:", error);
     }
-  }, [displayDevice]);
+  }, [device]);
 
   const loadDeviceData = useCallback(async () => {
-    if (!displayDevice) return;
+    if (!device) return;
 
     setIsLoading(true);
     try {
       // Fetch updated device properties
       const updatedDevice = await apiClient.get<Device>(
-        `/devices/${displayDevice.deviceId}`,
+        `/devices/${device.deviceId}`,
       );
       setDisplayDevice(updatedDevice);
 
       // Load notifications for this device
       const [notificationsResponse, metricsResponse] = await Promise.all([
         apiClient.get<Notification[]>(
-          `/notifications/filtered?relatedEntityId=${displayDevice.deviceId}&type=DEVICE_CHANGE_TASK_CREATION`,
+          `/notifications/filtered?relatedEntityId=${device.deviceId}&type=DEVICE_CHANGE_TASK_CREATION`,
         ),
         apiClient.get<Metric[]>(
-          `/metrics/filtered?deviceId=${displayDevice.deviceId}`,
+          `/metrics/filtered?deviceId=${device.deviceId}`,
         ),
       ]);
 
@@ -166,7 +166,7 @@ export default function DeviceDetailsModal({
     } finally {
       setIsLoading(false);
     }
-  }, [displayDevice]);
+  }, [device]);
 
   const colorPalette = [
     "#3b82f6", // blue
