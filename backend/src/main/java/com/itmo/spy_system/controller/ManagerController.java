@@ -80,6 +80,7 @@ public class ManagerController extends BaseExceptionHandler {
         if (ec.isEmailTaken(entity.getEmail())) {
             throw new EmailAlreadyExistsException("This email already exists in system");
         }
+        if (entity.getIsSenior() == null) entity.setIsSenior(false);
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_=+[{]}\\|;:\'\",<.>/?";
         String pwd = RandomStringUtils.random( 15, characters );
         entity.setPassword(pwd);
