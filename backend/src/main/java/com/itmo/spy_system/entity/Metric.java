@@ -6,7 +6,10 @@ import lombok.*;
 import java.sql.*;
 
 @Entity
-@Table(name = "device_metric")
+@Table(name = "device_metric", indexes = {
+        @Index(name = "device_metric_client_id_index", columnList = "clientId"),
+        @Index(name = "device_metric_device_id_index", columnList = "deviceId"),
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
