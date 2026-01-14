@@ -36,7 +36,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     volumes:
-      - ./postgres_data:/var/lib/postgresql/data
+      - ./postgres_dataa:/var/lib/postgresql/data
     networks:
       - spy-system-network
 

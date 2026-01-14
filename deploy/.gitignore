@@ -1,6 +1,9 @@
 **/sbin/**
 *.jar
 backend
+frontend
 nginx
 frontend_nginx
 application_prod.properties
+!configs/frontend_nginx
+!configs/nginx

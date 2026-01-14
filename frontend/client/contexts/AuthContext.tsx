@@ -65,7 +65,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     try {
       const credentials_s = `${credentials.username}:${credentials.password}`;
       const encodedCredentials = btoa(credentials_s); // base64 encode
-      apiClient.setAuthToken(encodedCredentials);
+      // apiClient.setAuthToken(encodedCredentials);
       const response = await apiClient.post<AuthResponse>(
         "/auth/login",
         credentials,
