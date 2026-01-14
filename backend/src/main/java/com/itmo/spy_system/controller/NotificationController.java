@@ -1,6 +1,7 @@
 package com.itmo.spy_system.controller;
 
 import com.itmo.spy_system.entity.Notification;
+import com.itmo.spy_system.repository.NotificationRepository;
 import com.itmo.spy_system.service.NotificationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,46 +18,27 @@ import java.util.Map;
 @RequestMapping("/api/notifications")
 public class NotificationController {
     private final NotificationService service;
+    private final NotificationRepository repository;
 
-    public NotificationController(NotificationService service) {
+    public NotificationController(NotificationService service, NotificationRepository repository) {
         this.service = service;
+        this.repository = repository;
     }
 
     @GetMapping("/filtered")
     public List<Notification> getFiltered(@RequestParam(required = false) Long clientId, @RequestParam(required = false) Long workerId, @RequestParam(required = false) Long managerId) {
-        List<Notification> results = service.findAll();
-        List<Notification> filteredResults = new ArrayList<>();
+        List<Notification> results = null;
         if (clientId != null) {
-            for (Notification n : results) {
-                if (n.getClientId() != null && n.getClientId().equals(clientId)) {
-                    filteredResults.add(n);
-                }
-            }
-//            results.removeIf(e -> !e.getClientId().equals(clientId));
+            results = repository.findByClientIdOrderByCreatedAtDesc(clientId);
         }
         if (workerId != null)  {
-            for (Notification n : results) {
-                if (n.getWorkerId() != null && n.getWorkerId().equals(workerId)) {
-                    filteredResults.add(n);
-                }
-            }
-//            results.removeIf(e -> !e.getClientId().equals(clientId));
+            results = repository.findByWorkerIdOrderByCreatedAtDesc(workerId);
         }
         if (managerId != null)  {
-            for (Notification n : results) {
-                if (n.getManagerId() != null && n.getManagerId().equals(managerId)) {
-                    filteredResults.add(n);
-                }
-            }
-//            results.removeIf(e -> !e.getClientId().equals(clientId));
+            results = repository.findByManagerIdOrderByCreatedAtDesc(managerId);
         }
-        filteredResults.sort((Notification m, Notification m1) -> {
-            if (m1.getCreatedAt() == null && m.getCreatedAt() == null) return 0;
-            if (m1.getCreatedAt() == null) return -1;
-            if (m.getCreatedAt() == null) return 1;
-            return m1.getCreatedAt().compareTo(m.getCreatedAt());
-        });
-        return filteredResults;
+        if (results == null) results = new ArrayList<>();
+        return results;
     }
 
     @GetMapping

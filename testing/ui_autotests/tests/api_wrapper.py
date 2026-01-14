@@ -1,6 +1,6 @@
 import requests
 
-BASE_API_URL = 'http://localhost'
+BASE_API_URL = 'http://localhost:8080'
 TIMEOUT = 10
 
 

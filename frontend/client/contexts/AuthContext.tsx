@@ -46,14 +46,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const token = localStorage.getItem("auth_token");
       if (token) {
         apiClient.setAuthToken(token);
-        const response = await apiClient.post<AuthResponse>(
-          "/auth/login",
-          "-1",
-        );
-        if (response.success && response.data) {
-          const { user, token } = response.data;
-          setUser(user);
-        }
+        const decoded = atob(token); //Buffer.from(token, "base64").toString("utf-8");
+        const splitted = decoded.split(":");
+        const username = splitted[0];
+        const password = splitted[1];
+        const l: LoginRequest = {username: username, password: password};
+        await login({username, password});
       }
     } catch (error) {
       console.error("Auth check failed:", error);

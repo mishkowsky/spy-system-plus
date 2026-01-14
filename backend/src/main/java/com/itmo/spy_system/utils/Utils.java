@@ -7,12 +7,10 @@ import com.itmo.spy_system.repository.ContractRepository;
 import com.itmo.spy_system.repository.DeviceRepository;
 import com.itmo.spy_system.repository.ManagerRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Field;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -23,7 +21,9 @@ public class Utils {
     private final ContractRepository contractRepository;
 
     public Manager getManagerByDeviceId(Long deviceId) {
-        Device d = deviceRepository.findById(deviceId).get();
+        Optional<Device> optD = deviceRepository.findById(deviceId);
+        if (optD.isEmpty()) return null;
+        Device d = optD.get();
         Long assignedClientId = d.getAssignedClientId();
         if (assignedClientId == null) return null;
         List<Contract> cs = contractRepository.findByClientId(assignedClientId);

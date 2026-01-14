@@ -9,8 +9,9 @@
 5. разархивнуть `tar xzvf nginx-1.17.0.tar.gz`
 6. `cd nginx-1.17.0`
 7. `./configure --prefix=/home/studs/s471663/deploy/frontend_nginx`
+   `make CFLAGS="-Wno-error=deprecated-declarations"`
 8. `make && make install`
-9. `./configure --prefix=/home/studs/s471663/deploy/nginx`
+9. `./configure --prefix=/home/studs/s471663/deploy/nginx --with-http_ssl_module --with-http_v2_module`
 10. `make && make install`
 11. настроить ssh на free-bsd
     
@@ -38,7 +39,7 @@
     /home/studs/s471663/deploy/frontend_nginx/sbin/nginx
     /home/studs/s471663/deploy/nginx/sbin/nginx
     ```
-23. на хосте пробросить порт `ssh -p 2222 -N -f s471663@77.234.196.4 -L 9000:localhost:4646` (остальные пробросы (к бэку, фронту напрямую, базе) - по необходимости)
+23. на хосте пробросить порт `ssh -p 2222 -N -f s471663@77.234.196.4 -L 9000:localhost:4676` (остальные пробросы (к бэку, фронту напрямую, базе) - по необходимости)
 
 PS в конфигах используются порты:
 - 4621 - порт нгинха фронта

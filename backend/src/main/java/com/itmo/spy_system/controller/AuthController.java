@@ -11,7 +11,9 @@ import com.itmo.spy_system.repository.WorkerRepository;
 import com.itmo.spy_system.service.PasswordResetService;
 import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
@@ -28,12 +30,13 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Timestamp;
 import java.util.Base64;
 import java.util.Optional;
+import com.itmo.spy_system.utils.ResourceException;
+// import org.springframework.web.bind.annotation.RequestBody;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-public class AuthController {
+public class AuthController extends BaseExceptionHandler {
 
     private final ClientRepository clientRepository;
     private final ManagerRepository managerRepository;
@@ -41,10 +44,19 @@ public class AuthController {
     private final ResetTokenRepository resetTokenRepository;
 
     @Data
-    @RequiredArgsConstructor
+    @AllArgsConstructor
     public static class LoginRequest {
-        private final String username;
-        private final String password;
+        private String username;
+        private String password;
+
+        public LoginRequest() {
+        }
+
+        public void setUsername(String username) { this.username = username; }
+        public void setPassword(String password) { this.password = password; }
+
+        public String getUsername() { return this.username; }
+        public String getPassword() { return this.password; }
     }
 
     @Data
@@ -115,25 +127,29 @@ public class AuthController {
         }
     }
 
-    @Secured({"client", "manager", "worker"})
+//     @Secured({"client", "manager", "worker"})
     @PostMapping("/login")
-    public AuthController.LoginResponse login(LoginRequest request) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    public AuthController.LoginResponse login(@RequestBody LoginRequest request) {
+//         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 //        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        Optional<Client> c_profile = clientRepository.findByEmail(userDetails.getUsername());
+//         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String email = request.username;
+        System.out.println(email);
+        System.out.println(request.password);
+        Optional<Client> c_profile = clientRepository.findByEmail(email); //userDetails.getUsername());
         if (c_profile.isPresent()) {
             return new AuthController.LoginResponse(true, new LoginResponseData(new ClientWithRole(c_profile.get(), "client"), createAuthHeader(request.username, request.password)));
         }
-        Optional<Worker> w_profile = workerRepository.findByEmail(userDetails.getUsername());
+        Optional<Worker> w_profile = workerRepository.findByEmail(email); //userDetails.getUsername());
         if (w_profile.isPresent()) {
             return new AuthController.LoginResponse(true, new LoginResponseData(w_profile.get(), createAuthHeader(request.username, request.password)));
         }
-        Optional<Manager> m_profile = managerRepository.findByEmail(userDetails.getUsername());
+        Optional<Manager> m_profile = managerRepository.findByEmail(email); //userDetails.getUsername());
         if (m_profile.isPresent()) {
             return new AuthController.LoginResponse(true, new LoginResponseData(new ManagerWithRole(m_profile.get(), "manager"), createAuthHeader(request.username, request.password)));
         }
-        throw new RuntimeException("User not found");
+//         throw new ResourceException("User not found");
+        throw new ResourceException(HttpStatus.UNAUTHORIZED, "Wrong email or password");
 //        AuthController.LoginResponse res = new AuthController.LoginResponse(userDetails, createAuthHeader(request.username, request.password));
 //        return res;
     }

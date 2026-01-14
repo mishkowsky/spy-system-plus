@@ -33,7 +33,7 @@ def pytest_addoption(parser):
     parser.addoption(
         "--base-url",
         action="store",
-        default="http://localhost",
+        default="https://localhost",
         help="Base URL of the application"
     )
     parser.addoption(
@@ -69,6 +69,8 @@ def chrome_driver(config):
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--disable-gpu")
+    options.add_argument('--ignore-ssl-errors=yes')
+    options.add_argument('--ignore-certificate-errors')
     prefs = {'profile.password_manager_leak_detection': False}
     options.add_experimental_option('prefs', prefs)
 

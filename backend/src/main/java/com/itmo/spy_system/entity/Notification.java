@@ -7,7 +7,11 @@ import lombok.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "notification")
+@Table(name = "notification", indexes = {
+        @Index(name = "notification_worker_id", columnList = "workerId"),
+        @Index(name = "notification_client_id", columnList = "clientId"),
+        @Index(name = "notification_manager_id", columnList = "managerId"),
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

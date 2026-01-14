@@ -3,3 +3,4 @@
 backend
 nginx
 frontend_nginx
+application_prod.properties
