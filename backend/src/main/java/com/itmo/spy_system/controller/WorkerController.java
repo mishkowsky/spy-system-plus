@@ -99,6 +99,7 @@ public class WorkerController extends BaseExceptionHandler {
         String pwd = RandomStringUtils.random( 15, characters );
         entity.setPassword(pwd);
         entity.setManager(manager);
+        System.out.println("SENDING EMAIL");
         mailSender.sendSimpleEmail(entity.getEmail(), "Создание аккаунта", "Для вас был создан аккаунт в системе Spy+\nВаш пароль: " + pwd);
         return service.save(entity);
     }

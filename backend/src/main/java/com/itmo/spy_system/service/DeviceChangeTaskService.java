@@ -84,7 +84,7 @@ public class DeviceChangeTaskService {
             notification.setStatus(NotificationStatus.UNREAD);
             notification.setType(NotificationType.TASK_CANCELLED);
             notification.setRelatedEntityId(fromDb.getId());
-            notification.setText("Задание #" + fromDb.getId() + " было отменено");
+            notification.setText("Задание замены устройства #" + fromDb.getId() + " было отменено");
             Notification n = notificationService.create(notification);
         }
         NullAwareBeanUtilsBean.copyNonNullProperties(toBePatched, fromDb);

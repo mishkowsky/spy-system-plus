@@ -5,5 +5,6 @@ frontend
 nginx
 frontend_nginx
 application_prod.properties
+application_dev.properties
 !configs/frontend_nginx
 !configs/nginx

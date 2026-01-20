@@ -29,9 +29,13 @@ public class DefaultEmailService {
         simpleMailMessage.setTo(toAddress);
         simpleMailMessage.setSubject(subject);
         simpleMailMessage.setText(message);
+
         try {
+            System.out.println("SENDING");
             emailSender.send(simpleMailMessage);
+            System.out.println("SENT");
         } catch (MailSendException e) {
+            System.out.println("ERROR");
             throw new ResourceException(HttpStatus.BAD_REQUEST, "Email does not exists");
         }
     }

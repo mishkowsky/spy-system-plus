@@ -19,7 +19,7 @@ CYCLE_PERIOD = 1000
 
 
 class DeviceThread(QThread):
-    BASE_API_URL = 'http://localhost:8080'
+    BASE_API_URL = 'https://localhost:9000'
 
     status_signal = Signal(str)
     state_signal = Signal(dict)
@@ -49,13 +49,13 @@ class DeviceThread(QThread):
         self.battery_discharge_pace = 5
 
     def fetch_latest_metric(self):
-        url = f"http://localhost:8080/api/devices/{self.device_id}/metrics/latest"
+        url = f"http://localhost:8181/api/devices/{self.device_id}/metrics/latest"
 
         try:
             response = requests.get(
                 url,
                 auth=self.auth,
-                timeout=TIMEOUT,
+                timeout=TIMEOUT, verify=False
             )
 
             if response.status_code != 200:
@@ -178,7 +178,7 @@ class DeviceThread(QThread):
     def post_off(self):
         url = f"{self.BASE_API_URL}/api/devices/{self.device_id}/off"
         try:
-            response = requests.post(url, timeout=TIMEOUT)
+            response = requests.post(url, timeout=TIMEOUT, verify=False)
 
             # Emit timestamp (even if error — attempt was made)
             self.last_post_signal.emit(time.time())
@@ -225,7 +225,7 @@ class DeviceThread(QThread):
                 url,
                 params=params,
                 json=payload,
-                timeout=TIMEOUT,
+                timeout=TIMEOUT, verify=False
             )
 
             # Emit timestamp (even if error — attempt was made)

@@ -61,6 +61,16 @@ public class PunishmentTaskService {
         if (toBePatched.getStatus() == TaskStatus.DONE) {
             toBePatched.setDoneAt(new Timestamp(System.currentTimeMillis()));
         }
+        if (toBePatched.getStatus() == TaskStatus.CANCELLED) {
+            Notification notification = new Notification();
+            notification.setWorkerId(fromDb.getExecutionerId());
+//            notification.setClientId(savedEntity.getClient().getId());
+            notification.setStatus(NotificationStatus.UNREAD);
+            notification.setType(NotificationType.TASK_CANCELLED);
+            notification.setRelatedEntityId(fromDb.getId());
+            notification.setText("Задание наказания #" + fromDb.getId() + " было отменено");
+            Notification n = notificationService.create(notification);
+        }
         NullAwareBeanUtilsBean.copyNonNullProperties(toBePatched, fromDb);
         return repository.save(fromDb);
     }

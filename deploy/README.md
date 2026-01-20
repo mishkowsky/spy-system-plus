@@ -23,15 +23,16 @@
     `scp -r -P 2225 root@localhost:/home/studs/s471663/deploy/frontend_nginx {PROJECT_ROOT}/deploy`
     `scp -r -P 2225 root@localhost:/home/studs/s471663/deploy/nginx {PROJECT_ROOT}/deploy`
 
-14. проверить настройки бэка: `backend/src/main/resources/application.properties`, пример см. в `deploy/configs/appliaction.properties`
+14. проверить настройки бэка: `backend/src/main/resources/application.properties`, пример см. в `deploy/configs/appliaction_example.properties`
 15. проверить настройки фронта: в `frontned/client/lib/api.ts` должно быть `this.baseUrl = baseUrl || import.meta.env.BASE_API_URL || import.meta.env.VITE_API_BASE_URL || "/api";`
-16. поднять `frontend` и `backend` в докере (не билдить же вручную лол)
+16. поднять `frontend` и `backend` в докере (или собрать вручную)
 17. из `frontend` достать папку `/usr/share/nginx/html`, поместить её вместо папки `{PROJECT_ROOT}/deploy/frontend_nginx/html`
 18. из `backend` достать файл `/app/app.jar`, поместить его в папку `{PROJECT_ROOT}/deploy/backend`
-19. содержимое `deploy/configs/frontend_nginx.conf` скопировать в `deploy/frontend_nginx/conf/nginx.conf`
-20. содержимое `deploy/configs/main_nginx.conf` скопировать в `deploy/nginx/conf/nginx.conf`
-21. `scp -P 2222 -r {PROJECT_ROOT}\deploy s471663@helios.cs.ifmo.ru:/home/studs/s471663/`
-22. на гелиосе:
+19. содержимое `deploy/configs/frontend_nginx/nginx.conf` скопировать в `deploy/frontend_nginx/conf/nginx.conf`
+20. содержимое `deploy/configs/nginx/nginx.conf` скопировать в `deploy/nginx/conf/nginx.conf`
+21. содержимое `deploy/configs/nginx/ssl` скопировать в `deploy/nginx/ssl`
+22. `scp -P 2222 -r {PROJECT_ROOT}\deploy s471663@helios.cs.ifmo.ru:/home/studs/s471663/`
+23. на гелиосе:
     ```bash
     chmod 777 /home/studs/s471663/deploy/nginx/sbin/nginx
     chmod 777 /home/studs/s471663/deploy/frontend_nginx/sbin/nginx
@@ -39,25 +40,31 @@
     /home/studs/s471663/deploy/frontend_nginx/sbin/nginx
     /home/studs/s471663/deploy/nginx/sbin/nginx
     ```
-23. на хосте пробросить порт `ssh -p 2222 -N -f s471663@77.234.196.4 -L 9000:localhost:4676` (остальные пробросы (к бэку, фронту напрямую, базе) - по необходимости)
+24. на хосте пробросить порт `ssh -p 2222 -N -f s471663@77.234.196.4 -L 9000:localhost:4676` (остальные пробросы (к бэку, фронту напрямую, базе) - по необходимости)
 
 PS в конфигах используются порты:
 - 4621 - порт нгинха фронта
 - 3954 - порт бэка
-- 4646 - порт основного нгинха-роутера
+- 4676 - порт основного нгинха-роутера (https)
 
 всякие команды
 -
+```bash
+# 
+ssh -p 2222 s471663@77.234.196.4
+```
+
 ```bash
 # Копировать папку со всем что есть внутри с виртуалки на хост (2225 - проброс порта на 22) (виндовс команда)
 scp -r -P 2225 root@localhost:/home/studs/s471663/frontend_nginx .
 ```
 
 ```bash
-
 # Копировать папку со всем что есть внутри с хоста на гелиос (виндовс команда)
 scp -P 2222 -r {PROJECT_ROOT}\deploy s471663@helios.cs.ifmo.ru:/home/studs/s471663/
 ```
+
+scp -P 2222 -r C:\Users\aleks\Documents\study2\2sem\mpi\spy-system-github\deploy\backend s471663@helios.cs.ifmo.ru:/home/studs/s471663/deploy
 
 ```bash
 # Проброс порта на гелиос (виндовс команда)

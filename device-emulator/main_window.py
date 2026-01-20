@@ -33,7 +33,7 @@ TIMEOUT = 30
 
 class MainWindow(QMainWindow):
     REFRESH_INTERVAL_MS = 5000
-    DEVICES_URL = "http://localhost:8080/api/devices"
+    DEVICES_URL = "https://localhost:9000/api/devices"
 
     def __init__(self):
         super().__init__()
@@ -92,7 +92,10 @@ class MainWindow(QMainWindow):
     def fetch_devices(self):
         request = QNetworkRequest(QUrl(self.DEVICES_URL))
         request.setRawHeader(b"Authorization", self.auth_header)
-        self.network.get(request)
+        # QNetworkReply * reply = manager->get(request);
+        # reply->ignoreSslErrors();
+        res = self.network.get(request)
+        res.ignoreSslErrors()
 
     # -------------------------
     # Handle response
